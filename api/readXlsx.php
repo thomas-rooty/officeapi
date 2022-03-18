@@ -6,6 +6,8 @@ require 'functions.php';
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
+Tracy\Debugger::enable(Tracy\Debugger::DEVELOPMENT);
+
 if (isset($_FILES['file']['name'])) {
     // file name
     $filename = $_FILES['file']['name'];
@@ -22,7 +24,7 @@ if (isset($_FILES['file']['name'])) {
     if ($fileType === 'xlsx') {
         // Get this file
         /*
-        $spreadsheet = IOFactory::load($location);
+        $spreadsheet = IOFactory::load($tmp);
         $sheet = $spreadsheet->getSheet(2);
 
         // Create contractPrices array and get cells from cellsToRead array on sheet 2
