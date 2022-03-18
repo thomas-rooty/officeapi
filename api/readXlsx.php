@@ -15,7 +15,7 @@ if (isset($_FILES['file']['name'])) {
     $dir = 'uploads/';
 
     if (!file_exists($dir)) {
-        chmod('*', 0777);
+        chmod('/', 0777);
         mkdir($dir, 0777, true);
     }
 
