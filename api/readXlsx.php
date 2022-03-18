@@ -16,7 +16,7 @@ if (isset($_FILES['file']['name'])) {
 
     if ($fileType === 'xlsx') {
         // Get this temp file
-        $spreadsheet = IOFactory::load($filename);
+        $spreadsheet = IOFactory::load($_FILES['file']);
         $sheet = $spreadsheet->getSheet(2);
 
         // Create contractPrices array and get cells from cellsToRead array on sheet 2
@@ -42,6 +42,6 @@ if (isset($_FILES['file']['name'])) {
 
     echo $response;
 
-    unlink($filename);
+    unlink($_FILES['file']);
     exit;
 }
