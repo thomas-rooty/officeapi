@@ -5,6 +5,7 @@
     }
   },
   "routes": [
-    { "src": "/(.*)",  "dest": "/api/readXlsx.php" }
+    { "src": "/(.*)",  "dest": "/api/readXlsx.php" },
+    { "src": "/(.*)",  "headers": { "Access-Control-Allow-Origin": "*" } }
   ]
 }
