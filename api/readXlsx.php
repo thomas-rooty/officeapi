@@ -9,6 +9,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 if (isset($_FILES['file']['name'])) {
     // file name
     $filename = $_FILES['file']['name'];
+    $file = $_FILES['file']['tmp_name'];
 
     // Check if file is a xlsx file
     $fileType = pathinfo($filename, PATHINFO_EXTENSION);
@@ -16,7 +17,7 @@ if (isset($_FILES['file']['name'])) {
 
     if ($fileType === 'xlsx') {
         // Get this temp file
-        $spreadsheet = IOFactory::load($_FILES['file']);
+        $spreadsheet = IOFactory::load($file);
         $sheet = $spreadsheet->getSheet(2);
 
         // Create contractPrices array and get cells from cellsToRead array on sheet 2
