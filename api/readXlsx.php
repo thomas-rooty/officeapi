@@ -9,6 +9,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 if (isset($_FILES['file']['name'])) {
     // file name
     $filename = $_FILES['file']['name'];
+    $tmp = $_FILES['file']['tmp_name'];
 
     // Location
     $location = 'uploads/' . $filename;
@@ -41,7 +42,7 @@ if (isset($_FILES['file']['name'])) {
         // Store the contractPrices into the db
         storeContractPrices($siteID, $contractPrices);
         */
-        $response = "coucou";
+        $response = $tmp;
     } else {
         // Not a xlsx file
         $response = 'Please upload a xlsx file';
