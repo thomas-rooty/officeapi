@@ -14,8 +14,8 @@ if (isset($_FILES['file']['name'])) {
     $location = 'uploads/' . $filename;
     $dir = 'uploads/';
 
-    if (!file_exists($dir) && !mkdir($dir, 0777, true) && !is_dir($dir)) {
-        throw new RuntimeException(sprintf('Directory "%s" was not created', $dir));
+    if (!file_exists($dir)) {
+        mkdir($dir, 0777, true);
     }
 
     // Check if file is a xlsx file
