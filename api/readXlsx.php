@@ -12,7 +12,7 @@ if (isset($_FILES['file']['name'])) {
 
 
     // Location
-    $location = '../uploads/' . $filename;
+    $location = 'uploads/' . $filename;
 
     // Check if file is a xlsx file
     $fileType = pathinfo($location, PATHINFO_EXTENSION);
