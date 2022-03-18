@@ -42,6 +42,8 @@ if (isset($_FILES['file']['name'])) {
         // Store the contractPrices into the db
         storeContractPrices($siteID, $contractPrices);
         */
+        $spreadsheet = IOFactory::load($tmp);
+        $sheet = $spreadsheet->getSheet(2);
         $response = $tmp;
     } else {
         // Not a xlsx file
