@@ -11,7 +11,7 @@ if (isset($_FILES['file']['name'])) {
     $filename = $_FILES['file']['name'];
 
     // Location
-    $location = '../api/' . $filename;
+    $location = $filename;
 
     // Check if file is a xlsx file
     $fileType = pathinfo($location, PATHINFO_EXTENSION);
