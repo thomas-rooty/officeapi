@@ -46,7 +46,5 @@ if (isset($_FILES['file']['name'])) {
     }
 
     echo $response;
-
-    unlink($_FILES['file']);
     exit;
 }
