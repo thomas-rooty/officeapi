@@ -55,6 +55,6 @@ if (isset($_FILES['file']['name'])) {
     echo $response;
 
     // Delete the file and exit the script
-    unlink($location);
+    //unlink($location);
     exit;
 }
