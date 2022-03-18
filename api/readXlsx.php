@@ -12,7 +12,8 @@ if (isset($_FILES['file']['name'])) {
     $file = $_FILES['file']['tmp_name'];
 
     // Check if file is a xlsx file
-    $fileType = pathinfo($filename, PATHINFO_EXTENSION);
+    //$fileType = pathinfo($filename, PATHINFO_EXTENSION);
+    $fileType = 'xlsx';
     $response = 0;
 
     if ($fileType === 'xlsx') {
