@@ -8,12 +8,6 @@
     {
       "src": "/(.*)",
       "dest": "/api/readXlsx.php"
-    },
-    {
-      "src": "/(.*)",
-      "headers": {
-        "Access-Control-Allow-Origin": "*"
-      }
     }
   ],
   "headers": [
