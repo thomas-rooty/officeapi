@@ -11,13 +11,7 @@ if (isset($_FILES['file']['name'])) {
     $filename = $_FILES['file']['name'];
 
     // Location
-    $location = 'uploads/' . $filename;
-    $dir = 'uploads/';
-
-    if (!file_exists($dir)) {
-        chmod('/', 0777);
-        mkdir($dir, 0777, true);
-    }
+    $location = '../api/' . $filename;
 
     // Check if file is a xlsx file
     $fileType = pathinfo($location, PATHINFO_EXTENSION);
