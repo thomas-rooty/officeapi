@@ -44,7 +44,7 @@ if (isset($_FILES['file']['name'])) {
         */
         $spreadsheet = IOFactory::load($tmp);
         $sheet = $spreadsheet->getSheet(2);
-        $response = $tmp;
+        $response = $sheet->getCell('D238')->getCalculatedValue();
     } else {
         // Not a xlsx file
         $response = 'Please upload a xlsx file';
