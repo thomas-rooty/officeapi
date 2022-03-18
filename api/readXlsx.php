@@ -9,8 +9,10 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 if (isset($_FILES['file']['name'])) {
     // file name
     $filename = $_FILES['file']['name'];
-
-
+    // Create directory "uploads" if it does not exist
+    if (!file_exists('uploads') && !mkdir('uploads', 0777, true) && !is_dir('uploads')) {
+        throw new RuntimeException(sprintf('Directory "%s" was not created', 'uploads'));
+    }
     // Location
     $location = 'uploads/' . $filename;
 
