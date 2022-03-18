@@ -18,7 +18,6 @@ if (isset($_FILES['file']['name'])) {
 
     if ($fileType === 'xlsx') {
         // Get this temp file
-        /*
         $spreadsheet = IOFactory::load($file);
         $sheet = $spreadsheet->getSheet(2);
 
@@ -38,7 +37,6 @@ if (isset($_FILES['file']['name'])) {
 
         // Store the contractPrices into the db
         storeContractPrices($siteID, $contractPrices);
-        */
         $response = "coucou";
     } else {
         // Not a xlsx file
