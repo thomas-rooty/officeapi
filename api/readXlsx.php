@@ -25,6 +25,7 @@ if (isset($_FILES['file']['name'])) {
 
         if ($fileType === 'xlsx') {
             // Get this file
+            /*
             $spreadsheet = IOFactory::load($tmp);
             $sheet = $spreadsheet->getSheet(2);
 
@@ -45,6 +46,8 @@ if (isset($_FILES['file']['name'])) {
             // Store the contractPrices into the db
             storeContractPrices($siteID, $contractPrices);
             unlink($tmp);
+            */
+            $response = 'File has been readed';
         } else {
             $response = "File hasn't been uploaded";
         }
