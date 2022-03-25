@@ -1020,4 +1020,5 @@
 /vendor/symfony/polyfill-mbstring/Mbstring.php
 /vendor/symfony/polyfill-mbstring/README.md
 /vendor/autoload.php
-.vercel
+/vendor/
+/vendor/tracy/

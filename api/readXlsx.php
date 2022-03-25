@@ -3,6 +3,8 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 require 'functions.php';
 
+header('Access-Control-Allow-Origin: *');
+
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
