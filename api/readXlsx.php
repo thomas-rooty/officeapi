@@ -41,9 +41,6 @@ if (isset($_FILES['file']['name'])) {
 
             // Return response with all the prix in json format
             $response = json_encode($contractPrices, JSON_THROW_ON_ERROR);
-
-            // Store the contractPrices into the db
-            //storeContractPrices($siteID, $contractPrices);
             unlink($tmp);
         } else {
             $response = "File hasn't been uploaded";
