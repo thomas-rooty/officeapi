@@ -4,7 +4,6 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 header('Access-Control-Allow-Origin: *');
 
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 if (isset($_FILES['file']['name'])) {
@@ -39,7 +38,11 @@ if (isset($_FILES['file']['name'])) {
             $siteID = $_POST['customerAddress_ID'];
 
             // Return response with all the prix in json format
-            $response = json_encode($contractPrices, JSON_THROW_ON_ERROR);
+            try {
+                $response = json_encode($contractPrices, JSON_THROW_ON_ERROR);
+            } catch (JsonException $e) {
+                $response = "Error: " . $e->getMessage();
+            }
             unlink($tmp);
         } else {
             $response = "File hasn't been uploaded";
