@@ -6,6 +6,8 @@ header('Access-Control-Allow-Origin: *');
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
+echo "Hello World";
+
 if (isset($_FILES['file']['name'])) {
     // Check if file has been uploaded
     if (is_uploaded_file($_FILES['file']['tmp_name'])) {
