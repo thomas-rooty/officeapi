@@ -6,7 +6,7 @@ header('Access-Control-Allow-Origin: *');
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
-echo "Hello World";
+echo json_encode($_FILES['file']['name']);
 
 if (isset($_FILES['file']['name'])) {
     // Check if file has been uploaded
