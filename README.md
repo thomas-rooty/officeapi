@@ -7,12 +7,12 @@ This PHP API allows you to read, edit, create, calculate cells from an Excel fil
 ## How to use Docker
 ### Build the image
 ```bash
-docker build -t api-office .
+docker build -t rootkitty/officeapi .
 ```
 
 ### Run the container
 ```bash
-docker run -d -p 80:80 --name api-office api-office
+docker run -d -p 80:80 --name officeapi officeapi
 ```
 
 ## JavaScript
