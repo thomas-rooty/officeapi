@@ -12,7 +12,7 @@ docker build -t api-office .
 
 ### Run the container
 ```bash
-docker run -d -p 5050:5050 --name api-office api-office
+docker run -d -p 80:80 --name api-office api-office
 ```
 
 ## JavaScript
