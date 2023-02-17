@@ -12,7 +12,7 @@ docker build -t rootkitty/officeapi .
 
 ### Run the container
 ```bash
-docker run -d -p 80:80 --name officeapi officeapi
+docker run -d -p 80:80 --name officeapi rootkitty/officeapi
 ```
 
 ## JavaScript
