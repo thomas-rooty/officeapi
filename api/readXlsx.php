@@ -25,8 +25,8 @@ $tmp = $_FILES['file']['tmp_name'];
 $location = UPLOADS_DIR . $filename;
 
 // Check if file is a xlsx file
-//$fileType = pathinfo($location, PATHINFO_EXTENSION);
-$fileType = XLSX_FILE_TYPE;
+$fileType = pathinfo($location, PATHINFO_EXTENSION);
+//$fileType = XLSX_FILE_TYPE;
 
 if ($fileType !== XLSX_FILE_TYPE) {
     exit('Please upload a xlsx file');
