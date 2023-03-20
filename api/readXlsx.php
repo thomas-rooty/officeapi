@@ -21,7 +21,6 @@ $location = 'uploads/' . $filename;
 
 // Check if file is a xlsx file
 $fileType = pathinfo($location, PATHINFO_EXTENSION);
-$response = 0;
 
 if ($fileType !== 'xlsx') {
   // File type is not valid
@@ -46,7 +45,7 @@ $contractPrices = [
 // Get the `customerAddress_ID`
 $siteID = $_POST['customerAddress_ID'];
 
-// Return response with all the prices in JSON format
+// Set response with all the prices in JSON format
 try {
   $response = json_encode($contractPrices, JSON_THROW_ON_ERROR);
 } catch (JsonException $e) {
@@ -56,5 +55,6 @@ try {
 // Remove the uploaded file
 unlink($tmp);
 
+// Return the response
 echo $response;
 exit;
