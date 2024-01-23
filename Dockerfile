@@ -30,5 +30,8 @@ COPY . /app
 # update composer
 RUN composer update
 
+# Create and set permissions for the uploads directory
+RUN mkdir /app/uploads && chmod 755 /app/uploads && chown www-data:www-data /app/uploads
+
 RUN a2enmod rewrite remoteip && \
     a2enconf z-app

@@ -1,0 +1,39 @@
+{
+	"info": {
+		"_postman_id": "83d4b0fc-b63b-4423-abf4-1b6339deb40b",
+		"name": "XLSX Reader API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18396490"
+	},
+	"item": [
+		{
+			"name": "Retrieve contract prices",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/thomas.caron/Desktop/Chiffrage contrat EUGENE DELACROIX.xlsx"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://wks-docker/api/readXlsx.php",
+					"protocol": "http",
+					"host": [
+						"wks-docker"
+					],
+					"path": [
+						"api",
+						"readXlsx.php"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
