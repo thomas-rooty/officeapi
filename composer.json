@@ -4,7 +4,8 @@
         "tracy/tracy": "^2.0",
         "ext-gd": "*",
         "ext-iconv": "*",
-        "phpoffice/phpspreadsheet": "^1.22"
+        "phpoffice/phpspreadsheet": "^1.22",
+        "phpoffice/phpword": "^1.2"
     }
     ,
     "require-dev": {
