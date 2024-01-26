@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         'ivoire' => 'ivoire.docx',
         'platinium' => 'platinium.docx',
         'silver' => 'silver.docx',
-        'goldplus' => 'goldplus.docx'
+        'goldplus' => 'goldp.docx'
     ];
 
     // Check if the provided contract type is valid
