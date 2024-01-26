@@ -24,17 +24,9 @@ class WordTemplateProcessor
                 $templateProcessor->setValue($placeholder, $value);
             }
 
-            // Save the processed template to a temporary file
             $tempFileName = tempnam(sys_get_temp_dir(), 'PHPWord');
             $templateProcessor->saveAs($tempFileName);
-
-            // Read the file content
-            $content = file_get_contents($tempFileName);
-
-            // Clean up the temporary file
-            unlink($tempFileName);
-
-            return $content;
+            return $tempFileName;
         } catch (Exception $e) {
             error_log("Error processing Word template: " . $e->getMessage());
             return null;
@@ -42,22 +34,49 @@ class WordTemplateProcessor
     }
 }
 
-// Example usage of the class
-$templatePath = '../docxFiles/gold.docx';
-$placeholders = [
-    'nomclient' => 'John Doe',
-    // Add more placeholders and their values as needed
-];
+// API endpoint
+if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+    // Check if the contract parameter is provided
+    if (empty($_GET['contract'])) {
+        echo "Erreur: Vous devez specifier le type du contrat.";
+        exit;
+    }
 
-$wordProcessor = new WordTemplateProcessor($templatePath);
-$documentContent = $wordProcessor->processTemplate($placeholders);
+    $contract = $_GET['contract'];
 
-if ($documentContent) {
-    // Send headers to force download
-    header('Content-Type: application/octet-stream');
-    header('Content-Disposition: attachment; filename="downloaded_document.docx"');
-    header('Content-Length: ' . strlen($documentContent));
-    echo $documentContent;
+    // Define the mapping of contract types to template files
+    $templates = [
+        'gold' => 'gold.docx',
+        'ivoire' => 'ivoire.docx',
+        'platinium' => 'platinium.docx',
+        'silver' => 'silver.docx',
+        'goldplus' => 'goldplus.docx'
+    ];
+
+    // Check if the provided contract type is valid
+    if (!array_key_exists($contract, $templates)) {
+        echo "Error: Invalid contract type.";
+        exit;
+    }
+
+    $templatePath = "../docxFiles/" . $templates[$contract];
+
+    // Fetch all query parameters and use them as placeholders
+    $placeholders = $_GET;
+    unset($placeholders['contract']); // Exclude 'contract' from placeholders
+
+    $wordProcessor = new WordTemplateProcessor($templatePath);
+    $tempFileName = $wordProcessor->processTemplate($placeholders);
+
+    if ($tempFileName) {
+        header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+        header('Content-Disposition: attachment; filename="' . $contract . '_document.docx"');
+        readfile($tempFileName);
+        unlink($tempFileName);
+    } else {
+        echo "Failed to process template.";
+    }
 } else {
-    echo "Failed to process template.";
+    echo "Invalid request method.";
 }
+
