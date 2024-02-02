@@ -19,7 +19,9 @@ RUN apt-get update -qq && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # PHP Extensions
+RUN pecl install mongodb
 RUN docker-php-ext-install -j$(nproc) opcache gd zip
+RUN docker-php-ext-enable mongodb
 COPY conf/php.ini /usr/local/etc/php/conf.d/app.ini
 
 # Apache

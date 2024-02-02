@@ -5,7 +5,9 @@
         "ext-gd": "*",
         "ext-iconv": "*",
         "phpoffice/phpspreadsheet": "^1.22",
-        "phpoffice/phpword": "^1.2"
+        "phpoffice/phpword": "^1.2",
+        "mongodb/mongodb": "^1.17.0",
+        "ext-mongodb": "^1.17"
     }
     ,
     "require-dev": {
