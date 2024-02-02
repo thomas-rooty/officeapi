@@ -19,6 +19,7 @@ RUN apt-get update -qq && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # PHP Extensions
+RUN apt-get update && apt-get install -y libcurl4-openssl-dev pkg-config libssl-dev
 RUN pecl install mongodb
 RUN docker-php-ext-install -j$(nproc) opcache gd zip
 RUN docker-php-ext-enable mongodb

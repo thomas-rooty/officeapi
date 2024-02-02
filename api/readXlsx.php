@@ -5,12 +5,23 @@ header('Access-Control-Allow-Origin: *');
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Reader\Exception as SpreadsheetReaderException;
+use MongoDB\Client;
+use MongoDB\Exception\Exception as MongoDBException;
 
 class SpreadsheetProcessor
 {
-
     private string $allowedFileType = 'xlsx';
     private string $uploadPath = '/app/uploads/';
+    private Client $mongoClient;
+    private string $mongoCollection = 'chiffrages';
+    private ?string $contractId = null;
+
+    public function __construct()
+    {
+        $mongoUri = $_ENV['IS_DEVELOPING'] === 'true' ? $_ENV['MONGODB_URI'] : $_ENV['MONGODB_URI'];
+        $this->mongoClient = new Client($mongoUri);
+        $this->contractId = $_GET['contract_ID'] ?? null;
+    }
 
     public function processUploadedFile($file): bool|string
     {
@@ -29,9 +40,14 @@ class SpreadsheetProcessor
 
         try {
             $contractPrices = $this->readSpreadsheet($filePath);
-        } catch (SpreadsheetReaderException $e) {
+            if ($this->contractId) {
+                $this->updateDatabase($contractPrices);
+            } else {
+                throw new \Exception("Contract ID is missing.");
+            }
+        } catch (SpreadsheetReaderException|MongoDBException|\Exception $e) {
             $this->cleanUpFile($filePath);
-            return "Error reading spreadsheet: " . $e->getMessage();
+            return "Error processing file: " . $e->getMessage();
         }
 
         $this->cleanUpFile($filePath);
@@ -78,7 +94,20 @@ class SpreadsheetProcessor
 
     private function formatCell($cell): string
     {
-        return number_format($cell->getCalculatedValue(), 1, '.', '');
+        return number_format($cell->getCalculatedValue(), 2, '.', '');
+    }
+
+    private function updateDatabase(array $contractPrices): void
+    {
+        $collection = $this->mongoClient->selectCollection('sites', $this->mongoCollection);
+        $updateResult = $collection->updateOne(
+            ['contract_ID' => $this->contractId],
+            ['$set' => ['contractPricesAtTime' => $contractPrices]]
+        );
+
+        if ($updateResult->getModifiedCount() == 0) {
+            error_log("No document was updated for contract ID: {$this->contractId}");
+        }
     }
 
     private function cleanUpFile($filePath): void
@@ -88,6 +117,10 @@ class SpreadsheetProcessor
 }
 
 // Main script logic
-$processor = new SpreadsheetProcessor();
-$response = $processor->processUploadedFile($_FILES['file']);
-echo $response;
+if (isset($_FILES['file'])) {
+    $processor = new SpreadsheetProcessor();
+    $response = $processor->processUploadedFile($_FILES['file']);
+    echo $response;
+} else {
+    echo "No file uploaded";
+}
