@@ -46,11 +46,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     // Define the mapping of contract types to template files
     $templates = [
-        'gold' => 'gold.docx',
-        'ivoire' => 'ivoire.docx',
-        'platinium' => 'platinium.docx',
-        'silver' => 'silver.docx',
-        'goldplus' => 'goldp.docx'
+        'contract_Ivoire' => 'ivoire.docx',
+        'contract_Silver' => 'silver.docx',
+        'contract_Gold' => 'gold.docx',
+        'contract_GoldPlus' => 'goldp.docx',
+        'contract_Platinium' => 'platinium.docx',
     ];
 
     // Check if the provided contract type is valid
