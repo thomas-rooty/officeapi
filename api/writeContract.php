@@ -20,8 +20,35 @@ class WordTemplateProcessor
         try {
             $templateProcessor = new TemplateProcessor($this->templatePath);
 
+            $distanceId = isset($placeholders['distance']) ? (int)$placeholders['distance'] : null;
+
+            if ($distanceId === 99) {
+                // If distance is 99, set only the generic 'forfaitDeplacement'
+                $templateProcessor->setValue('forfaitDeplacement', $placeholders['forfaitDeplacement'] ?? '');
+
+                // Ensure specific 'forfaitDeplacementX' placeholders are set to blank
+                for ($i = 0; $i <= 5; $i++) {
+                    $templateProcessor->setValue("forfaitDeplacement$i", '');
+                }
+            } else {
+                // Set the generic 'forfaitDeplacement' to blank
+                $templateProcessor->setValue('forfaitDeplacement', '');
+
+                // Set value or blank for specific 'forfaitDeplacementX'
+                for ($i = 0; $i <= 5; $i++) {
+                    if ($i === $distanceId) {
+                        $templateProcessor->setValue("forfaitDeplacement$i", $placeholders['forfaitDeplacement'] ?? '');
+                    } else {
+                        $templateProcessor->setValue("forfaitDeplacement$i", '');
+                    }
+                }
+            }
+
+            // Process other placeholders, excluding 'distance' and handled 'forfaitDeplacement' variants
             foreach ($placeholders as $placeholder => $value) {
-                $templateProcessor->setValue($placeholder, $value);
+                if (!str_starts_with($placeholder, 'forfaitDeplacement') && $placeholder !== 'distance') {
+                    $templateProcessor->setValue($placeholder, $value);
+                }
             }
 
             $tempFileName = tempnam(sys_get_temp_dir(), 'PHPWord');
