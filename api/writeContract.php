@@ -21,9 +21,10 @@ class WordTemplateProcessor
             $templateProcessor = new TemplateProcessor($this->templatePath);
 
             $distanceId = isset($placeholders['distance']) ? (int)$placeholders['distance'] : null;
+            $agency_name = $placeholders['agency_name'] ?? '';
 
-            if ($distanceId === 99) {
-                // If distance is 99, set only the generic 'forfaitDeplacement'
+            if ($agency_name === 'QUIETALIS PARIS NORD' || $agency_name === 'QUIETALIS PARIS EST' || $agency_name === 'QUIETALIS PARIS OUEST') {
+                // If agency is IDF, set only the generic 'forfaitDeplacement'
                 $templateProcessor->setValue('forfaitDeplacement', $placeholders['forfaitDeplacement'] ?? '');
 
                 // Ensure specific 'forfaitDeplacementX' placeholders are set to blank
