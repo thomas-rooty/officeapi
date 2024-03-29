@@ -81,22 +81,7 @@ class SpreadsheetProcessor
     private function readSpreadsheet($filePath): array
     {
         $spreadsheet = IOFactory::load($filePath);
-
-        $sheetCount = $spreadsheet->getSheetCount();
-        for ($sheetIndex = 0; $sheetIndex < $sheetCount; $sheetIndex++) {
-            $sheet = $spreadsheet->getSheet($sheetIndex);
-            foreach ($sheet->getCellCollection() as $cell) {
-                $cellValue = $sheet->getCell($cell)->getCalculatedValue();
-                $sheet->getCell($cell)->setValue($cellValue); // Remplace la formule par la valeur
-            }
-        }
-
-        // Sauvegarde du fichier après avoir supprimé toutes les formules
-        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
-        $writer->save($filePath);
-
-        // Continuez avec votre logique de traitement, par exemple en lisant des cellules spécifiques
-        $sheet = $spreadsheet->getSheet(3); // Exemple de reprise d'une feuille spécifique
+        $sheet = $spreadsheet->getSheet(2);
 
         return [
             "contract_Ivoire" => $this->formatCell($sheet->getCell('D238')),
