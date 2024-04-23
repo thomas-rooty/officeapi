@@ -14,6 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 use PhpOffice\PhpWord\TemplateProcessor;
 use PhpOffice\PhpWord\IOFactory;
+use PhpOffice\PhpWord\Shared\Converter;
 
 class WordTemplateProcessor
 {
@@ -28,6 +29,12 @@ class WordTemplateProcessor
     {
         try {
             $templateProcessor = new TemplateProcessor($this->templatePath);
+
+            // Checking the 'equipments' placeholder
+            $equipments = $placeholders['equipments'] ?? null;
+            if (isset($equipments)) {
+                $this->populateEquipmentsTable($templateProcessor, $placeholders['equipments']);
+            }
 
             $distanceId = isset($placeholders['distance']) ? (int)$placeholders['distance'] : null;
             $agency_name = $placeholders['agency_name'] ?? '';
@@ -54,10 +61,10 @@ class WordTemplateProcessor
                 }
             }
 
-            // Process other placeholders, excluding 'distance' and handled 'forfaitDeplacement' variants
+            // Process other placeholders, excluding 'distance' and handled 'forfaitDeplacement' variants, and 'equipments'
             foreach ($placeholders as $placeholder => $value) {
                 // Special treatment for
-                if (!str_starts_with($placeholder, 'forfaitDeplacement') && $placeholder !== 'distance') {
+                if (!str_starts_with($placeholder, 'forfaitDeplacement') && $placeholder !== 'distance' && $placeholder !== 'equipments') {
                     $templateProcessor->setValue($placeholder, $value);
                 }
             }
@@ -69,6 +76,29 @@ class WordTemplateProcessor
             error_log("Error processing Word template: " . $e->getMessage());
             return null;
         }
+    }
+
+    private function populateEquipmentsTable(TemplateProcessor $templateProcessor, array $equipments): void
+    {
+        // Group equipments by equipmentkind_ID
+        $groupedEquipments = [];
+        foreach ($equipments as $equipment) {
+            $groupedEquipments[$equipment['equipmentkind_ID']][] = $equipment['name'];
+        }
+
+        // Prepare values for cloning
+        $values = [];
+        foreach ($groupedEquipments as $kindID => $equipmentNames) {
+            // Add the kindID as a header row
+            $values[] = ['equipmentInfo' => $kindID];
+            foreach ($equipmentNames as $name) {
+                // Add each equipment name under the corresponding kindID
+                $values[] = ['equipmentInfo' => $name];
+            }
+        }
+
+        // Clone and set values in the template
+        $templateProcessor->cloneRowAndSetValues('equipmentInfo', $values);
     }
 }
 
