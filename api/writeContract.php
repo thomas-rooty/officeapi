@@ -2,6 +2,15 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
+
+// Handle CORS preflight request
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    // Just send OK status and exit
+    http_response_code(200);
+    exit;
+}
 
 use PhpOffice\PhpWord\TemplateProcessor;
 use PhpOffice\PhpWord\IOFactory;
@@ -47,6 +56,7 @@ class WordTemplateProcessor
 
             // Process other placeholders, excluding 'distance' and handled 'forfaitDeplacement' variants
             foreach ($placeholders as $placeholder => $value) {
+                // Special treatment for
                 if (!str_starts_with($placeholder, 'forfaitDeplacement') && $placeholder !== 'distance') {
                     $templateProcessor->setValue($placeholder, $value);
                 }
@@ -63,16 +73,18 @@ class WordTemplateProcessor
 }
 
 // API endpoint
-if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    // Check if the contract parameter is provided
-    if (empty($_GET['contract'])) {
-        echo "Erreur: Vous devez specifier le type du contrat.";
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Read the JSON payload from the request body
+    $jsonData = file_get_contents("php://input");
+    $data = json_decode($jsonData, true);
+
+    // Ensure the necessary data is present
+    if (empty($data['contract'])) {
+        echo "Error: You must specify the type of contract.";
         exit;
     }
 
-    $contract = $_GET['contract'];
-
-    // Define the mapping of contract types to template files
+    $contract = $data['contract'];
     $templates = [
         'contract_Ivoire' => 'ivoire.docx',
         'contract_Silver' => 'silver.docx',
@@ -81,20 +93,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         'contract_Platinium' => 'platinium.docx',
     ];
 
-    // Check if the provided contract type is valid
     if (!array_key_exists($contract, $templates)) {
         echo "Error: Invalid contract type.";
         exit;
     }
 
     $templatePath = "../docxFiles/" . $templates[$contract];
-
-    // Fetch all query parameters and use them as placeholders
-    $placeholders = $_GET;
-    unset($placeholders['contract']); // Exclude 'contract' from placeholders
-
     $wordProcessor = new WordTemplateProcessor($templatePath);
-    $tempFileName = $wordProcessor->processTemplate($placeholders);
+
+    // Use all provided data as placeholders, excluding 'contract'
+    unset($data['contract']);
+    $tempFileName = $wordProcessor->processTemplate($data);
 
     if ($tempFileName) {
         header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
@@ -107,4 +116,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 } else {
     echo "Invalid request method.";
 }
-
