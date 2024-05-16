@@ -80,25 +80,30 @@ class WordTemplateProcessor
 
     private function populateEquipmentsTable(TemplateProcessor $templateProcessor, array $equipments): void
     {
-        // Group equipments by equipmentkind_ID
         $groupedEquipments = [];
-        foreach ($equipments as $equipment) {
-            $groupedEquipments[$equipment['equipmentkind_ID']][] = $equipment['name'];
-        }
 
-        // Prepare values for cloning
-        $values = [];
-        foreach ($groupedEquipments as $kindID => $equipmentNames) {
-            // Add the kindID as a header row
-            $values[] = ['equipmentInfo' => $kindID];
-            foreach ($equipmentNames as $name) {
-                // Add each equipment name under the corresponding kindID
-                $values[] = ['equipmentInfo' => $name];
+        foreach ($equipments as $equipment) {
+            $location = $equipment['location'] ?? 'Non renseigné';
+            $type = $equipment['equipmenttype'] ?? '';
+
+            $key = $location . '|' . $type;  // Create a unique key for each combination of location and type
+
+            if (isset($groupedEquipments[$key])) {
+                $groupedEquipments[$key]['equipQty'] += 1;
+            } else {
+                $groupedEquipments[$key] = [
+                    'equipLocation' => $location,
+                    'equipType' => $type,
+                    'equipQty' => 1,
+                ];
             }
         }
 
+        // Prepare the values for the template processor
+        $values = array_values($groupedEquipments);
+
         // Clone and set values in the template
-        $templateProcessor->cloneRowAndSetValues('equipmentInfo', $values);
+        $templateProcessor->cloneRowAndSetValues('equipLocation', $values);
     }
 }
 
@@ -116,11 +121,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $contract = $data['contract'];
     $templates = [
-        'contract_Ivoire' => 'ivoire.docx',
         'contract_Silver' => 'silver.docx',
         'contract_Gold' => 'gold.docx',
         'contract_GoldPlus' => 'goldp.docx',
-        'contract_Platinium' => 'platinium.docx',
     ];
 
     if (!array_key_exists($contract, $templates)) {
