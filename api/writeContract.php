@@ -36,35 +36,10 @@ class WordTemplateProcessor
                 $this->populateEquipmentsTable($templateProcessor, $placeholders['equipments']);
             }
 
-            $distanceId = isset($placeholders['distance']) ? (int)$placeholders['distance'] : null;
-            $agency_name = $placeholders['agency_name'] ?? '';
-
-            if ($agency_name === 'QUIETALIS PARIS NORD' || $agency_name === 'QUIETALIS PARIS EST' || $agency_name === 'QUIETALIS PARIS OUEST') {
-                // If agency is IDF, set only the generic 'forfaitDeplacement'
-                $templateProcessor->setValue('forfaitDeplacement', $placeholders['forfaitDeplacement'] ?? '');
-
-                // Ensure specific 'forfaitDeplacementX' placeholders are set to blank
-                for ($i = 0; $i <= 5; $i++) {
-                    $templateProcessor->setValue("forfaitDeplacement$i", '');
-                }
-            } else {
-                // Set the generic 'forfaitDeplacement' to blank
-                $templateProcessor->setValue('forfaitDeplacement', '');
-
-                // Set value or blank for specific 'forfaitDeplacementX'
-                for ($i = 0; $i <= 5; $i++) {
-                    if ($i === $distanceId) {
-                        $templateProcessor->setValue("forfaitDeplacement$i", $placeholders['forfaitDeplacement'] ?? '');
-                    } else {
-                        $templateProcessor->setValue("forfaitDeplacement$i", '');
-                    }
-                }
-            }
-
             // Process other placeholders, excluding 'distance' and handled 'forfaitDeplacement' variants, and 'equipments'
             foreach ($placeholders as $placeholder => $value) {
                 // Special treatment for
-                if (!str_starts_with($placeholder, 'forfaitDeplacement') && $placeholder !== 'distance' && $placeholder !== 'equipments') {
+                if ($placeholder !== 'distance' && $placeholder !== 'equipments') {
                     $templateProcessor->setValue($placeholder, $value);
                 }
             }
