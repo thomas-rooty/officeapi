@@ -36,10 +36,10 @@ class WordTemplateProcessor
                 $this->populateEquipmentsTable($templateProcessor, $placeholders['equipments']);
             }
 
-            // Process other placeholders, excluding 'distance' and handled 'forfaitDeplacement' variants, and 'equipments'
+            // Process other placeholders, excluding and handled 'forfaitDeplacement' variants, and 'equipments'
             foreach ($placeholders as $placeholder => $value) {
                 // Special treatment for
-                if ($placeholder !== 'distance' && $placeholder !== 'equipments') {
+                if ($placeholder !== 'equipments') {
                     $templateProcessor->setValue($placeholder, $value);
                 }
             }
