@@ -36,10 +36,13 @@ class WordTemplateProcessor
                 $this->populateEquipmentsTable($templateProcessor, $placeholders['equipments']);
             }
 
-            // Process other placeholders, excluding and handled 'forfaitDeplacement' variants, and 'equipments'
+            // Process other placeholders, excluding 'equipments'
             foreach ($placeholders as $placeholder => $value) {
-                // Special treatment for
                 if ($placeholder !== 'equipments') {
+                    // Convert spaces to non-breaking spaces
+                    if (is_string($value)) {
+                        $value = str_replace(' ', ' ', $value);  // Use non-breaking space character
+                    }
                     $templateProcessor->setValue($placeholder, $value);
                 }
             }
@@ -52,6 +55,7 @@ class WordTemplateProcessor
             return null;
         }
     }
+
 
     private function populateEquipmentsTable(TemplateProcessor $templateProcessor, array $equipments): void
     {
