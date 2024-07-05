@@ -43,6 +43,10 @@ class WordTemplateProcessor
                     if (is_string($value)) {
                         $value = str_replace(' ', ' ', $value);  // Use non-breaking space character
                     }
+                    // If the value is empty, fill it with blank spaces
+                    if ($value == '') {
+                        $value = '                            ';
+                    }
                     $templateProcessor->setValue($placeholder, $value);
                 }
             }
