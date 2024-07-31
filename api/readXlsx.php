@@ -102,7 +102,16 @@ class SpreadsheetProcessor
         $collection = $this->mongoClient->selectCollection('sites', $this->mongoCollection);
         $updateResult = $collection->updateOne(
             ['contract_ID' => $this->contractId],
-            ['$set' => ['contractPricesAtTime' => $contractPrices]]
+            [
+                '$set' => [
+                    'contractPricesAtTime' => $contractPrices,
+                    'status' => 'calculated'
+                ],
+                '$unset' => [
+                    'finalPriceExcludingBenefits' => '',
+                    'choosenTypeContrat' => ''
+                ]
+            ]
         );
 
         if ($updateResult->getModifiedCount() == 0) {
